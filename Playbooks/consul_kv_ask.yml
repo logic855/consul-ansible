@@ -1,0 +1,23 @@
+---
+- hosts: "{{ target }}"
+  become: true
+  become_user: root
+
+  tasks:  
+ # - name: ask for a kv
+ #   get_url:
+ #     url: http://localhost:8500/v1/kv/devstaff_url
+ #     dest: /tmp/devstaff_url.txt
+
+#  - name: output it
+#    debug: msg="{{lookup('file','/tmp/devstaff_url.txt')}}"
+
+
+  - name: ask for a kv
+    uri: url="http://localhost:8500/v1/kv/devstaff_url"
+    register: json_response
+
+  - debug: msg="{{ json_response }}"
+
+
+

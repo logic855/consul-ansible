@@ -1,0 +1,15 @@
+---
+- hosts: agents
+  become: true
+  become_user: root
+
+  tasks:  
+  - name: cpy disk_usage.py
+    copy: src=disk_usage.py dest=/opt/disk_usage.py owner=root group=root mode=0766
+
+  - name: create a node level check to test disk usage
+    consul:
+      check_name: Disk usage
+      check_id: disk_usage
+      script: "/opt/disk_usage.py"
+      interval: 1m

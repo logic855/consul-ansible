@@ -1,0 +1,14 @@
+---
+- hosts: agents
+  become: true
+  become_user: root
+
+  tasks:  
+  - name: register nginx service with the local consul agent
+    consul:
+      service_name: nginx
+      service_port: 80
+      tags:
+      - agents_nginx
+      - nginx
+      - webservers

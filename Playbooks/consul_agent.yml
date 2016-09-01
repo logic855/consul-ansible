@@ -1,0 +1,61 @@
+---
+- hosts: agents
+  become: true
+  become_user: root
+
+  vars:
+    consul_join: "192.168.10.101"
+  
+  tasks:
+  - name: Download Consul x64
+    get_url: url=https://releases.hashicorp.com/consul/0.6.4/consul_0.6.4_linux_amd64.zip dest=/tmp/consul.zip
+
+  - name: Download Unzip
+    apt: name=unzip state=latest
+
+  - name: install python pip
+    apt: name=python-pip state=latest
+
+  - name: install python consul
+    command: pip install python-consul
+
+  - name: install python-psutil
+    apt: name=python-psutil state=latest
+
+  - name: unzip consul
+    command: unzip /tmp/consul.zip -d /tmp creates=/tmp/consul
+  
+  - name: opt consul
+    command: mv /tmp/consul /opt/consul creates=/opt/consul
+
+  - name: remove tmp
+    command: rm -rf /tmp/consul
+
+  - name: etc consul.d
+    command: mkdir /etc/consul.d creates=/etc/consul.d
+
+  - name: log consul
+    command: mkdir /var/log/consul creates=/var/log/consul
+
+  - name: data consul
+    command: mkdir /var/consul creates=/var/consul
+
+  - name: supervise consul
+    template: src=supervisor_agent.j2 dest=/etc/supervisor/conf.d/consul.conf  
+
+  - name: Set Up Consul Agent Conf
+    template: src=consul_agent.j2 dest=/etc/consul.d/server.json
+
+  - name: Restart Consul
+    supervisorctl: name=consul state=restarted
+
+  - name: get the UI
+    get_url: url=https://releases.hashicorp.com/consul/0.6.4/consul_0.6.4_web_ui.zip dest=/tmp/ui.zip
+
+  - name: make dir ui
+    command: mkdir -p /var/www/ui     
+
+  - name: unzip ui
+    command: unzip /tmp/ui.zip -d /var/www/ui 
+
+

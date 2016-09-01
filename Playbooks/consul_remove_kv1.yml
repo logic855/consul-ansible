@@ -1,0 +1,10 @@
+---
+- hosts: agents
+  become: true
+  become_user: root
+
+  tasks:  
+  - name: add or update the value associated with a key in the key/value store
+    consul_kv:
+      key: somekey_test1
+      state: absent

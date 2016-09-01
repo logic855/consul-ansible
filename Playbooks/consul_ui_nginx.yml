@@ -1,0 +1,14 @@
+---
+- hosts: agents
+  become: true
+  become_user: root
+  
+  tasks:
+  - name: Download nginx
+    apt: name=nginx state=latest
+
+  - name: move default
+    copy: src=default.conf dest=/etc/nginx/sites-available/default owner=root group=root 
+
+  - name: restart nginx
+    command: service nginx restart

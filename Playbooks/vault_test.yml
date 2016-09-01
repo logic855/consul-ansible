@@ -1,0 +1,15 @@
+---
+- hosts: agents
+  become: true
+  become_user: root
+
+  vars_files:
+    - ./vaulted.yml
+  vars:
+    mytext: "hello there\n"
+
+  tasks:  
+  - name: coppy across mytext
+    copy:
+      content: "{{ mytext}}"
+      dest: /tmp/mytext.txt
