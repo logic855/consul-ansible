@@ -1,0 +1,14 @@
+---
+- hosts: all
+  become: true
+  become_user: root
+
+  tasks:  
+  - name: register external check for devstaff.gr
+    consul:
+      service_name: devstaff_website
+      service_port: 80
+      service_address: 164.132.54.126
+      tags:
+      - devstaff.gr
+      - webservers

@@ -13,6 +13,15 @@
   - name: Download Unzip
     apt: name=unzip state=latest
 
+  - name: install python pip
+    apt: name=python-pip state=latest
+
+  - name: install python consul
+    command: pip install python-consul
+
+  - name: install python-psutil
+    apt: name=python-psutil state=latest    
+
   - name: unzip consul
     command: unzip /tmp/consul.zip -d /tmp creates=/tmp/consul
   
